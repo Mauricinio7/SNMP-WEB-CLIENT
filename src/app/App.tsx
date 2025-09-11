@@ -1,31 +1,24 @@
-import { useState } from "react";
-import reactLogo from "../shared/assets/react.svg";
-import viteLogo from "/vite.svg";
-import "../shared/styles/App.css";
+import { Outlet, NavLink } from "react-router-dom";
+import { PAGE_PATH } from "./routeManager/pages.paths";
 
-function App() {
-	const [count, setCount] = useState(0);
-
+export default function App() {
 	return (
-		<>
-			<div>
-				<a href="https://vite.dev" target="_blank">
-					<img src={viteLogo} className="logo" alt="Vite logo" />
-				</a>
-				<a href="https://react.dev" target="_blank">
-					<img src={reactLogo} className="logo react" alt="React logo" />
-				</a>
-			</div>
-			<h1>Vite + React</h1>
-			<div className="card">
-				<button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-				<p>
-					Edit <code>src/App.tsx</code> and save to test HMR
-				</p>
-			</div>
-			<p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-		</>
+		<div style={{ minHeight: "100vh", display: "grid", gridTemplateRows: "auto 1fr auto" }}>
+			<header style={{ padding: "16px", borderBottom: "1px solid #eee" }}>
+				<h1 style={{ margin: 0 }}>Generic app</h1>
+				<nav style={{ marginTop: 8, display: "flex", gap: 12 }}>
+					<NavLink to={PAGE_PATH.main}>Page 1</NavLink>
+					<NavLink to={PAGE_PATH.second}>Page 2</NavLink>
+				</nav>
+			</header>
+
+			<main style={{ padding: "16px" }}>
+				<Outlet />
+			</main>
+
+			<footer style={{ padding: "16px", borderTop: "1px solid #eee" }}>
+				<small>© {new Date().getFullYear()} Generic app</small>
+			</footer>
+		</div>
 	);
 }
-
-export default App;
