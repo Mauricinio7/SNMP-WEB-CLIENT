@@ -1,6 +1,6 @@
 import { Outlet, NavLink } from "react-router-dom";
 import { PAGE_PATH } from "./routeManager/pages.paths";
-import style from "./AppLayout.module.css";
+import style from "../shared/styles/AppLayout.module.css";
 
 export default function App() {
 	return (
