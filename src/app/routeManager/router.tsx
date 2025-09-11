@@ -1,6 +1,7 @@
 import { createBrowserRouter, type RouteObject } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { PAGE_PATH } from "./pages.paths";
+import { LoaderFallback } from "../../shared/ui/LoaderFallback";
 
 const App = lazy(() => import("../App"));
 const MainPage = lazy(() => import("../../pages/MainPage"));
@@ -12,7 +13,7 @@ const Fallback = <p style={{ padding: 16 }}>Cargando…</p>;
 const routes: RouteObject[] = [
 	{
 		element: (
-			<Suspense fallback={Fallback}>
+			<Suspense fallback={<LoaderFallback />}>
 				<App />
 			</Suspense>
 		),

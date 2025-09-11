@@ -4,7 +4,9 @@ import { PAGE_PATH } from "./routeManager/pages.paths";
 export default function App() {
 	return (
 		<div style={{ minHeight: "100vh", display: "grid", gridTemplateRows: "auto 1fr auto" }}>
-			<header style={{ padding: "16px", borderBottom: "1px solid #eee" }}>
+			<header
+				style={{ padding: "16px", borderBottom: "1px solid #eee", height: "100%", width: "100%" }}
+			>
 				<h1 style={{ margin: 0 }}>Generic app</h1>
 				<nav style={{ marginTop: 8, display: "flex", gap: 12 }}>
 					<NavLink to={PAGE_PATH.main}>Page 1</NavLink>
