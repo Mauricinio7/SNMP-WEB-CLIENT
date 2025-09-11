@@ -1,7 +1,7 @@
 export default function MainPage() {
 	return (
 		<section>
-			<h2>Menú principal</h2>
+			<h1>Menú principal</h1>
 		</section>
 	);
 }
