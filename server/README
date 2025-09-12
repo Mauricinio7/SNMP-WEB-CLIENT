@@ -1,0 +1,9 @@
+* Crear un ambiente virtual en este directorio
+Nombre: venv
+Versiion: 3.11
+
+* Instalar las dependencias
+pip install -r requirements.txt
+
+* Ejecutar para probar
+uvicorn app.main:app --reload
