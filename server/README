@@ -1,6 +1,5 @@
 * Crear un ambiente virtual en este directorio
-Nombre: venv
-Versiion: 3.11
+python3.11 -m venv venv
 
 * Instalar las dependencias
 pip install -r requirements.txt

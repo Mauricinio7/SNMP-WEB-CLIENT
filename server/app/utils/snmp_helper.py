@@ -1,7 +1,14 @@
-from pysnmp.hlapi import *
+from pysnmp.hlapi import getCmd, SnmpEngine, CommunityData, UdpTransportTarget, ContextData, ObjectType, ObjectIdentity
 from app.core.config import SNMP_PORT
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s"
+)
 
 def snmp_get(ip: str, community: str, oid: str) -> str:
+    logging.info(f"Iniciando SNMP GET a {ip} con OID {oid}")
     iterator = getCmd(
         SnmpEngine(),
         CommunityData(community, mpModel=0),
@@ -9,8 +16,17 @@ def snmp_get(ip: str, community: str, oid: str) -> str:
         ContextData(),
         ObjectType(ObjectIdentity(oid))
     )
+
     errorIndication, errorStatus, errorIndex, varBinds = next(iterator)
-    if errorIndication or errorStatus:
+
+    if errorIndication:
+        logging.error(f"Error SNMP: {errorIndication}")
         return "0"
+    elif errorStatus:
+        logging.error(f"{errorStatus.prettyPrint()} en {errorIndex}")
+        return "0"
+
     for varBind in varBinds:
-        return str(varBind[1])
+        value = str(varBind[1])
+        logging.info(f"OID: {varBind[0]}, Valor: {value}")
+        return value
