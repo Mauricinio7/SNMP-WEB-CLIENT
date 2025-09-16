@@ -1,0 +1,3 @@
+En esta carpeta se podrá meter todo lo del servidor como ustedes quieran ...
+
+No me gusta el mono Repo pero es lo que hay :(
