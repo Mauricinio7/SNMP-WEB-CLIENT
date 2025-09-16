@@ -60,7 +60,6 @@ export default function App() {
 
 				<main className={style.main}>
 					<div className={style.contentCard}>
-						<h1 className={style.title}>Administración de dispositivos disponibles</h1>
 						<Outlet />
 					</div>
 				</main>

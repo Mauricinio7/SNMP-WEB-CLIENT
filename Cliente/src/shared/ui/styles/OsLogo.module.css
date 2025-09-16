@@ -1,0 +1,11 @@
+/* OsLogo.module.css */
+.wrapper {
+	width: 100%;
+	display: contents; /* deja que el <img> herede del contenedor padre */
+}
+
+.wrapper img {
+	width: 100%;
+	height: auto;
+	object-fit: contain;
+}
