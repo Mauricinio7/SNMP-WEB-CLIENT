@@ -1,56 +1,53 @@
 export type DeviceComponentType = "cpu" | "memory" | "disk" | "system" | "network";
 
-export type CpuData = { model: string; usage: number; cores: string; uptime: string };
 export type MemoryData = { size: string; used: string; percent: number };
-export type DiskData = { size: string; used: string; write: string; read: string };
-export type SystemData = { name: string; uptime: string; cpuTemp: string; gpuTemp: string };
-export type NetworkData = {
-	iface: string;
-	linkSpeedMbps: number;
-	upMbps: number;
-	downMbps: number;
-};
 
 export type DeviceComponentData =
-	| { type: "cpu"; data: CpuData }
 	| { type: "memory"; data: MemoryData }
-	| { type: "disk"; data: DiskData }
-	| { type: "system"; data: SystemData }
-	| { type: "network"; data: NetworkData };
+	// los demás siguen mockeados por ahora
+	| { type: "cpu"; data: any }
+	| { type: "disk"; data: any }
+	| { type: "system"; data: any }
+	| { type: "network"; data: any };
 
-function fakeDb(id: number, type: DeviceComponentType): DeviceComponentData {
-	switch (type) {
-		case "cpu":
-			return {
-				type,
-				data: { model: "Intel Core i7 8750H", usage: 12, cores: "6, 12 hilos", uptime: "12 h" },
-			};
-		case "memory":
-			return { type, data: { size: "8 GB", used: "4 GB", percent: 50 } };
-		case "disk":
-			return { type, data: { size: "2 TB", used: "50%", write: "500 mb/s", read: "0 mb/s" } };
-		case "system":
-			return {
-				type,
-				data: { name: "AN-515-52STMP1", uptime: "15 h", cpuTemp: "50°", gpuTemp: "47°" },
-			};
-		case "network":
-			return {
-				type,
-				data: {
-					iface: id % 2 ? "eth0" : "ens33",
-					linkSpeedMbps: 1000,
-					upMbps: Math.round(10 + Math.random() * 90),
-					downMbps: Math.round(50 + Math.random() * 200),
-				},
-			};
-	}
-}
-
+// ----------------- SOLO memoria real -----------------
 export async function fetchDeviceComponent(
 	id: number,
 	type: DeviceComponentType,
 ): Promise<DeviceComponentData> {
-	await new Promise((r) => setTimeout(r, 300));
-	return fakeDb(id, type);
+	if (type === "memory") {
+		const res = await fetch(`http://127.0.0.1:8000/snmp/memory/${id}`);
+		if (!res.ok) {
+			throw new Error(`Error ${res.status}: no se pudo obtener la memoria de PC ${id}`);
+		}
+		const json = await res.json();
+
+		const sizeGB = (json.total_kb / (1024 * 1024)).toFixed(1) + " GB";
+		const usedGB = (json.used_kb / (1024 * 1024)).toFixed(1) + " GB";
+
+		return {
+			type: "memory",
+			data: {
+				size: sizeGB,
+				used: usedGB,
+				percent: Math.round(json.used_pct),
+			},
+		};
+	}
+
+	// ----------------- MOCK para lo demás -----------------
+	if (type === "cpu") {
+		return { type, data: { model: "Intel Core i7", usage: 10, cores: "6", uptime: "5h" } };
+	}
+	if (type === "disk") {
+		return { type, data: { size: "1 TB", used: "40%", write: "200 MB/s", read: "150 MB/s" } };
+	}
+	if (type === "system") {
+		return { type, data: { name: "Server", uptime: "12h", cpuTemp: "45°", gpuTemp: "42°" } };
+	}
+	if (type === "network") {
+		return { type, data: { iface: "eth0", linkSpeedMbps: 1000, upMbps: 20, downMbps: 80 } };
+	}
+
+	throw new Error("Tipo no soportado: " + type);
 }
