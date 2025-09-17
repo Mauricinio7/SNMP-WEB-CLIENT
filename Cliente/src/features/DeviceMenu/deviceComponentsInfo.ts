@@ -4,13 +4,12 @@ export type MemoryData = { size: string; used: string; percent: number };
 
 export type DeviceComponentData =
 	| { type: "memory"; data: MemoryData }
-	// los demás siguen mockeados por ahora
+	// TODO: This is a mock
 	| { type: "cpu"; data: any }
 	| { type: "disk"; data: any }
 	| { type: "system"; data: any }
 	| { type: "network"; data: any };
 
-// ----------------- SOLO memoria real -----------------
 export async function fetchDeviceComponent(
 	id: number,
 	type: DeviceComponentType,
@@ -35,7 +34,7 @@ export async function fetchDeviceComponent(
 		};
 	}
 
-	// ----------------- MOCK para lo demás -----------------
+	//TODO: This is a mock
 	if (type === "cpu") {
 		return { type, data: { model: "Intel Core i7", usage: 10, cores: "6", uptime: "5h" } };
 	}

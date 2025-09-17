@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import style from "./DeviceCard.module.css";
 import { OsLogo } from "../../shared/ui/OsLogo";
 import { pcPath } from "../../app/routeManager/pages.paths";
-import { fetchDeviceById, type Device } from "./mockDevices";
+import { fetchDeviceById, type Device } from "./devicesInfoService";
 
 type Props = { id: number; to?: string };
 

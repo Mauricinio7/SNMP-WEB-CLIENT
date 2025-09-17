@@ -13,7 +13,7 @@ import {
 	fetchDeviceComponent,
 	type DeviceComponentType,
 	type DeviceComponentData,
-} from "./mockDevice";
+} from "./deviceComponentsInfo";
 
 import RadialGauge from "../../shared/ui/RadialGauge";
 import BarGauge from "../../shared/ui/BarGauge";

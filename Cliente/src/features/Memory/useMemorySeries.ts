@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { fetchMemorySnapshot, type MemorySnapshot } from "./memory.service.mock";
+import { fetchMemorySnapshot, type MemorySnapshot } from "./memoryInfoService";
 
 export function useMemorySeries(pcId: number) {
 	const [data, setData] = useState<MemorySnapshot | null>(null);
