@@ -13,3 +13,8 @@ GENERAL_DEVICE_OIDS = {
     "os_description": "1.3.6.1.2.1.1.1.0",
     "ram_size": "1.3.6.1.4.1.2021.4.3.0",
 }
+
+UCD_MEM = {
+    "memTotalReal": "1.3.6.1.4.1.2021.4.5.0",   # Total RAM en kB
+    "memAvailReal": "1.3.6.1.4.1.2021.4.6.0",   # RAM disponible en kB
+}
