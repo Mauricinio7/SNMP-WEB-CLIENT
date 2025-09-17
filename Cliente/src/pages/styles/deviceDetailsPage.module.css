@@ -10,8 +10,8 @@
 .grid {
 	display: grid;
 	gap: 60px;
-	grid-template-columns: repeat(1, minmax(60px, 1fr)); /* más ancho mínimo */
-	max-width: 1600px; /* más espacio total */
+	grid-template-columns: repeat(1, minmax(60px, 1fr));
+	max-width: 1600px;
 	margin: 0 auto;
 }
 
@@ -23,7 +23,7 @@
 
 @media (min-width: 1024px) {
 	.grid {
-		grid-template-columns: repeat(4, minmax(60px, 1fr)); /* en desktop 3 columnas */
+		grid-template-columns: repeat(3, minmax(60px, 1fr));
 	}
 }
 

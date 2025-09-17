@@ -1,55 +1,47 @@
-export type DeviceComponentType = "cpu" | "memory" | "disk" | "system";
+export type DeviceComponentType = "cpu" | "memory" | "disk" | "system" | "network";
 
 export type CpuData = { model: string; usage: number; cores: string; uptime: string };
 export type MemoryData = { size: string; used: string; percent: number };
 export type DiskData = { size: string; used: string; write: string; read: string };
 export type SystemData = { name: string; uptime: string; cpuTemp: string; gpuTemp: string };
+export type NetworkData = {
+	iface: string;
+	linkSpeedMbps: number;
+	upMbps: number;
+	downMbps: number;
+};
 
 export type DeviceComponentData =
 	| { type: "cpu"; data: CpuData }
 	| { type: "memory"; data: MemoryData }
 	| { type: "disk"; data: DiskData }
-	| { type: "system"; data: SystemData };
+	| { type: "system"; data: SystemData }
+	| { type: "network"; data: NetworkData };
 
 function fakeDb(id: number, type: DeviceComponentType): DeviceComponentData {
 	switch (type) {
 		case "cpu":
 			return {
 				type,
-				data: {
-					model: id === 1 ? "Intel Core i7 8750H" : "AMD Ryzen 5 5600X",
-					usage: id === 1 ? 10 : 23,
-					cores: id === 1 ? "6, 12 hilos" : "6, 12 hilos",
-					uptime: id === 1 ? "12 horas" : "8 horas",
-				},
+				data: { model: "Intel Core i7 8750H", usage: 12, cores: "6, 12 hilos", uptime: "12 h" },
 			};
 		case "memory":
-			return {
-				type,
-				data: {
-					size: id === 1 ? "8 GB" : "16 GB",
-					used: id === 1 ? "4 GB" : "8 GB",
-					percent: id === 1 ? 50 : 50,
-				},
-			};
+			return { type, data: { size: "8 GB", used: "4 GB", percent: 50 } };
 		case "disk":
-			return {
-				type,
-				data: {
-					size: id === 1 ? "2 TB" : "1 TB",
-					used: "50%",
-					write: "500 mb/s",
-					read: "0 mb/s",
-				},
-			};
+			return { type, data: { size: "2 TB", used: "50%", write: "500 mb/s", read: "0 mb/s" } };
 		case "system":
 			return {
 				type,
+				data: { name: "AN-515-52STMP1", uptime: "15 h", cpuTemp: "50°", gpuTemp: "47°" },
+			};
+		case "network":
+			return {
+				type,
 				data: {
-					name: id === 1 ? "AN-515-52STMP1" : "SRV-NOC-03",
-					uptime: id === 1 ? "15 horas" : "3 días",
-					cpuTemp: "50°",
-					gpuTemp: "47°",
+					iface: id % 2 ? "eth0" : "ens33",
+					linkSpeedMbps: 1000,
+					upMbps: Math.round(10 + Math.random() * 90),
+					downMbps: Math.round(50 + Math.random() * 200),
 				},
 			};
 	}

@@ -11,6 +11,7 @@ const CPUDetailsPage = lazy(() => import("../../pages/ CPUDetailsPage"));
 const MemoryDetailsPage = lazy(() => import("../../pages/MemoryDetailsPage"));
 const DiskDetailsPage = lazy(() => import("../../pages/DiskDetailsPage"));
 const SystemDetailsPage = lazy(() => import("../../pages/SystemDetailsPage"));
+const NetDetailsPage = lazy(() => import("../../pages/NetDetailsPage"));
 const NotFoundPage = lazy(() => import("../../pages/NotFoundPage"));
 
 const Fallback = <p style={{ padding: 16 }}>Cargando…</p>;
@@ -79,7 +80,14 @@ const routes: RouteObject[] = [
 					</Suspense>
 				),
 			},
-
+			{
+				path: "/pc/:id/network",
+				element: (
+					<Suspense fallback={Fallback}>
+						<NetDetailsPage />
+					</Suspense>
+				),
+			},
 			{
 				path: "*",
 				element: (

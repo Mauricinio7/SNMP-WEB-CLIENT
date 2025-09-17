@@ -18,6 +18,7 @@ export default function DeviceDetailsPage() {
 				<DeviceComponentCard id={idNum} type="memory" />
 				<DeviceComponentCard id={idNum} type="disk" />
 				<DeviceComponentCard id={idNum} type="system" />
+				<DeviceComponentCard id={idNum} type="network" />
 			</div>
 		</section>
 	);

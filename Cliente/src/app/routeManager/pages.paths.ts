@@ -6,6 +6,7 @@ export const PAGE_PATH = {
 	memory: "/pc/:id/memory",
 	disk: "/pc/:id/disk",
 	system: "/pc/:id/system",
+	network: "/pc/:id/network",
 } as const;
 
 export const pcPath = (id: number | string) => `/pc/${id}`;
@@ -13,3 +14,4 @@ export const cpuPath = (id: number | string) => `/pc/${id}/cpu`;
 export const memoryPath = (id: number | string) => `/pc/${id}/memory`;
 export const diskPath = (id: number | string) => `/pc/${id}/disk`;
 export const systemPath = (id: number | string) => `/pc/${id}/system`;
+export const networkPath = (id: number | string) => `/pc/${id}/network`;
