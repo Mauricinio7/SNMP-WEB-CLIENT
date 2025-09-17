@@ -1,8 +1,12 @@
-export default function StatRow({ label, value }: { label: string; value: string }) {
+import style from "./StatRow.module.css";
+
+type Props = { label: string; value: string };
+
+export default function StatRow({ label, value }: Props) {
 	return (
-		<div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: 8 }}>
-			<dt style={{ opacity: 0.8 }}>{label}:</dt>
-			<dd style={{ margin: 0, fontWeight: 600 }}>{value}</dd>
+		<div className={style.row}>
+			<dt className={style.label}>{label}:</dt>
+			<dd className={style.value}>{value}</dd>
 		</div>
 	);
 }

@@ -1,8 +1,7 @@
 import { useParams, Navigate } from "react-router-dom";
 import { useMemorySeries, formatBytes } from "../features/Memory/useMemorySeries";
-import MemoryChart from "../features/Memory/MemoryChart";
 import StatRow from "../features/Memory/StatRow";
-import Meter from "../features/Memory/Meter";
+import BarGauge from "../shared/ui/BarGauge"; // 👈 importa tu nuevo componente
 import style from "./styles/MemoryDetailsPage.module.css";
 
 export default function MemoryDetailsPage() {
@@ -19,38 +18,43 @@ export default function MemoryDetailsPage() {
 			{loading && <p style={{ textAlign: "center", opacity: 0.7 }}>Cargando…</p>}
 			{error && <p style={{ textAlign: "center", color: "#b91c1c" }}>Error al cargar datos</p>}
 			{!loading && data && (
-				<>
-					<div className={style.cards}>
-						<article className={style.card}>
-							<h3 className={style.cardTitle}>Resumen RAM</h3>
-							<dl style={{ margin: 0, display: "grid", gap: 8 }}>
-								<StatRow label="Total" value={formatBytes(data.now.totalBytes)} />
-								<StatRow label="Usada" value={`${formatBytes(data.now.usedBytes)} (${pct.ram}%)`} />
-								<StatRow label="Disponible" value={formatBytes(data.now.availBytes)} />
-								<StatRow label="Buffers" value={formatBytes(data.now.buffersBytes)} />
-								<StatRow label="Caché" value={formatBytes(data.now.cachedBytes)} />
-							</dl>
-							<Meter value={pct.ram} />
-						</article>
+				<div className={style.cards}>
 
-						<article className={style.card}>
-							<h3 className={style.cardTitle}>Swap</h3>
-							<dl style={{ margin: 0, display: "grid", gap: 8 }}>
-								<StatRow label="Total" value={formatBytes(data.now.swapTotalBytes)} />
-								<StatRow
-									label="Usada"
-									value={`${formatBytes(data.now.swapUsedBytes)} (${pct.swap}%)`}
-								/>
-							</dl>
-							<Meter value={pct.swap} low={20} high={80} optimum={10} />
-						</article>
-					</div>
-
-					<article className={`${style.card} ${style.chartCard}`}>
-						<figcaption className={style.caption}>Uso en el tiempo</figcaption>
-						<MemoryChart series={data} />
+					<article className={style.card}>
+						<h3 className={style.cardTitle}>Resumen RAM</h3>
+						<dl style={{ margin: 0, display: "grid", gap: 8 }}>
+							<StatRow label="Total" value={formatBytes(data.totalBytes)} />
+							<StatRow label="Usada" value={`${formatBytes(data.usedBytes)} (${pct.ram}%)`} />
+							<StatRow label="Disponible" value={formatBytes(data.availBytes)} />
+							<StatRow label="Buffers" value={formatBytes(data.buffersBytes)} />
+							<StatRow label="Caché" value={formatBytes(data.cachedBytes)} />
+						</dl>
+						<BarGauge
+							value={pct.ram}
+							max={100}
+							unit="%"
+							label="Uso RAM"
+							warnAt={70}
+							dangerAt={90}
+						/>
 					</article>
-				</>
+
+					<article className={style.card}>
+						<h3 className={style.cardTitle}>Swap</h3>
+						<dl style={{ margin: 0, display: "grid", gap: 8 }}>
+							<StatRow label="Total" value={formatBytes(data.swapTotalBytes)} />
+							<StatRow label="Usada" value={`${formatBytes(data.swapUsedBytes)} (${pct.swap}%)`} />
+						</dl>
+						<BarGauge
+							value={pct.swap}
+							max={100}
+							unit="%"
+							label="Uso Swap"
+							warnAt={40}
+							dangerAt={80}
+						/>
+					</article>
+				</div>
 			)}
 		</section>
 	);

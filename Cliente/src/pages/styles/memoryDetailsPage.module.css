@@ -1,39 +1,45 @@
 .wrapper {
-	max-width: 1100px;
-	margin: 0 auto;
-	padding: 12px 20px 32px;
+	padding: 20px 40px 40px;
 }
 
 .title {
 	text-align: center;
-	margin: 10px 0 24px;
+	margin: 20px 0 40px;
+	font-size: 2rem;
+	font-weight: 800;
 }
 
 .cards {
 	display: grid;
-	gap: 16px;
-	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-	margin-bottom: 24px;
+	gap: 40px;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	width: 100%;
 }
 
 .card {
 	background: var(--pill-bg);
 	border: 1px solid var(--pill-border);
-	border-radius: 16px;
-	box-shadow: var(--shadow-sm);
-	padding: 16px;
+	border-radius: 20px;
+	box-shadow: var(--shadow-md);
+	padding: 32px;
+	font-size: 1.1rem;
 }
 
 .cardTitle {
-	margin: 0 0 10px;
-	font-size: 1.1rem;
-	font-weight: 800;
+	margin: 0 0 20px;
+	font-size: 1.5rem;
+	font-weight: 700;
+	text-align: center;
 }
 
-.chartCard {
-	padding: 12px;
+@media (min-width: 768px) {
+	.cards {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
 }
-.caption {
-	margin: 0 0 8px;
-	font-weight: 700;
+
+@media (min-width: 1280px) {
+	.cards {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
 }

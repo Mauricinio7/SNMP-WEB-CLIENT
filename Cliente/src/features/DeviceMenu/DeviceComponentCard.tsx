@@ -1,5 +1,4 @@
-// src/features/MainMenu/DeviceComponentCard.tsx
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import style from "./DeviceComponentCard.module.css";
 import { cpuPath, memoryPath, diskPath, systemPath } from "../../app/routeManager/pages.paths";
@@ -9,6 +8,9 @@ import {
 	type DeviceComponentType,
 	type DeviceComponentData,
 } from "./mockDevice";
+
+import RadialGauge from "../../shared/ui/RadialGauge";
+import BarGauge from "../../shared/ui/BarGauge";
 
 const TITLE: Record<DeviceComponentType, string> = {
 	cpu: "CPU",
@@ -57,6 +59,56 @@ export default function DeviceComponentCard({ id, type }: Props) {
 		}
 	})();
 
+	const gauges = useMemo(() => {
+		if (!data) return { show: false as const };
+		if (data.type === "cpu") {
+			const raw = (data.data as any).usage;
+			const val = typeof raw === "string" ? parseFloat(raw) : Number(raw);
+			return {
+				show: true as const,
+				kind: "radial" as const,
+				value: isNaN(val) ? 0 : val,
+				unit: "%",
+				label: "Uso CPU",
+			};
+		}
+		if (data.type === "memory") {
+			const raw = (data.data as any).percent;
+			const val = typeof raw === "string" ? parseFloat(raw) : Number(raw);
+			return {
+				show: true as const,
+				kind: "radial" as const,
+				value: isNaN(val) ? 0 : val,
+				unit: "%",
+				label: "Uso Memoria",
+			};
+		}
+		if (data.type === "disk") {
+			const raw = (data.data as any).used;
+			const val = typeof raw === "string" ? parseFloat(raw) : Number(raw);
+			return {
+				show: true as const,
+				kind: "radial" as const,
+				value: isNaN(val) ? 0 : val,
+				unit: "%",
+				label: "Uso Disco",
+			};
+		}
+		if (data.type === "system") {
+			const raw = (data.data as any).cpuTemp;
+			const temp = typeof raw === "string" ? parseFloat(raw) : Number(raw);
+			const val = isNaN(temp) ? 0 : temp;
+			return {
+				show: true as const,
+				kind: "bar" as const,
+				value: val,
+				unit: "°C",
+				label: "Temperatura CPU",
+			};
+		}
+		return { show: false as const };
+	}, [data]);
+
 	return (
 		<Link to={href} className={style.card} aria-label={`Abrir ${TITLE[type]} de PC ${id}`}>
 			<div className={style.header}>{TITLE[type]}</div>
@@ -73,7 +125,7 @@ export default function DeviceComponentCard({ id, type }: Props) {
 							</div>
 							<div className={style.row}>
 								<dt>Uso:</dt>
-								<dd>{data.data.usage}%</dd>
+								<dd>{(data.data as any).usage}%</dd>
 							</div>
 							<div className={style.row}>
 								<dt>Cores:</dt>
@@ -98,7 +150,7 @@ export default function DeviceComponentCard({ id, type }: Props) {
 							</div>
 							<div className={style.row}>
 								<dt>Porcentaje:</dt>
-								<dd>{data.data.percent}%</dd>
+								<dd>{(data.data as any).percent}%</dd>
 							</div>
 						</dl>
 					)}
@@ -144,6 +196,14 @@ export default function DeviceComponentCard({ id, type }: Props) {
 							</div>
 						</dl>
 					)}
+					<div className={style.chart}>
+						{gauges.show && gauges.kind === "radial" && (
+							<RadialGauge value={gauges.value} unit={gauges.unit} label={gauges.label} />
+						)}
+						{gauges.show && gauges.kind === "bar" && (
+							<BarGauge value={gauges.value} unit={gauges.unit} label={gauges.label} />
+						)}
+					</div>
 				</>
 			) : (
 				<p style={{ color: "red" }}>Error al cargar datos</p>

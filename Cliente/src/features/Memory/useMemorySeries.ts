@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { fetchMemorySNMP } from "./memory.service.mock";
-import { MemorySeries } from "./types";
+import { fetchMemorySnapshot, type MemorySnapshot } from "./memory.service.mock";
 
 export function useMemorySeries(pcId: number) {
-	const [data, setData] = useState<MemorySeries | null>(null);
+	const [data, setData] = useState<MemorySnapshot | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<Error | null>(null);
 
@@ -12,16 +11,18 @@ export function useMemorySeries(pcId: number) {
 		setLoading(true);
 		setError(null);
 
-		fetchMemorySNMP(pcId)
+		fetchMemorySnapshot(pcId)
 			.then((d) => {
-				if (!alive) return;
-				setData(d);
-				setLoading(false);
+				if (alive) {
+					setData(d);
+					setLoading(false);
+				}
 			})
 			.catch((e) => {
-				if (!alive) return;
-				setError(e as Error);
-				setLoading(false);
+				if (alive) {
+					setError(e as Error);
+					setLoading(false);
+				}
 			});
 
 		return () => {
@@ -31,10 +32,9 @@ export function useMemorySeries(pcId: number) {
 
 	const pct = useMemo(() => {
 		if (!data) return { ram: 0, swap: 0 };
-		const { now } = data;
-		const ram = now.totalBytes ? Math.round((now.usedBytes / now.totalBytes) * 100) : 0;
-		const swap = now.swapTotalBytes
-			? Math.round(((now.swapUsedBytes ?? 0) / now.swapTotalBytes) * 100)
+		const ram = data.totalBytes ? Math.round((data.usedBytes / data.totalBytes) * 100) : 0;
+		const swap = data.swapTotalBytes
+			? Math.round(((data.swapUsedBytes ?? 0) / data.swapTotalBytes) * 100)
 			: 0;
 		return { ram, swap };
 	}, [data]);

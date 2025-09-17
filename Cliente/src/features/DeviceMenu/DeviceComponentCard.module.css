@@ -52,16 +52,10 @@ dd {
 	font-weight: 500;
 }
 
-.logoWrapper {
+.chart {
 	margin-top: auto;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding-top: 16px;
-}
-.logoWrapper img {
-	max-width: 70%;
-	max-height: 140px;
-	object-fit: contain;
-	opacity: 0.95;
+	display: grid;
+	place-items: center;
+	min-height: 140px;
+	padding-top: 8px;
 }
