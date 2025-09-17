@@ -39,7 +39,6 @@ export default function DeviceCard({ id, to }: Props) {
 	return (
 		<Link to={href} className={style.card} aria-label={`Abrir detalles de PC ${id}`}>
 			<div className={style.header}>PC {id}:</div>
-			<h3 className={style.name}>Nombre: {name}</h3>
 
 			{status === "error" ? (
 				<p style={{ color: "#b91c1c", fontWeight: 600, margin: 0 }}>
@@ -47,6 +46,7 @@ export default function DeviceCard({ id, to }: Props) {
 				</p>
 			) : (
 				<dl className={style.meta}>
+					<h3 className={style.name}>Nombre: {name}</h3>
 					<div className={style.row}>
 						<dt>OS:</dt>
 						<dd>{os}</dd>

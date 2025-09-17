@@ -1,6 +1,6 @@
 TEAM_MEMBERS = {
     1: {"ip": "192.168.1.10", "community": "seguro"},  # Este es el de don yael
-    2: {"ip": "192.168.1.11", "community": "seguro"},  # Este es el de don mau
+    2: {"ip": "192.168.1.212", "community": "seguro"},  # Este es el de don mau
     3: {"ip": "192.168.1.12", "community": "seguro"},  # Este es el de don noel
     4: {"ip": "192.168.10.227", "community": "seguro"},   # Este es el de gabo
 }
