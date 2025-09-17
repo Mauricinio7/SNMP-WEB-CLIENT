@@ -1,0 +1,12 @@
+* Crear y activar un ambiente virtual en este directorio
+python3.11 -m venv venv
+    Activar en unix: 
+        source venv/bin/activate
+    Activar en powershell
+        venv\Scripts\Activate.ps1
+
+* Instalar las dependencias
+pip install -r requirements.txt
+
+* Ejecutar para probar
+uvicorn app.main:app --reload
