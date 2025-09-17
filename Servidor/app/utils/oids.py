@@ -14,7 +14,12 @@ GENERAL_DEVICE_OIDS = {
     "ram_size": "1.3.6.1.4.1.2021.4.3.0",
 }
 
+
 UCD_MEM = {
-    "memTotalReal": "1.3.6.1.4.1.2021.4.5.0",   # Total RAM en kB
-    "memAvailReal": "1.3.6.1.4.1.2021.4.6.0",   # RAM disponible en kB
+    "memTotalReal":  "1.3.6.1.4.1.2021.4.5.0",   # RAM total (kB)
+    "memAvailReal":  "1.3.6.1.4.1.2021.4.6.0",   # RAM disponible (kB)
+    "memBuffer":     "1.3.6.1.4.1.2021.4.14.0",  # Buffers (kB)
+    "memCached":     "1.3.6.1.4.1.2021.4.15.0",  # Caché (kB)
+    "memTotalSwap":  "1.3.6.1.4.1.2021.4.3.0",   # SWAP total (kB)
+    "memAvailSwap":  "1.3.6.1.4.1.2021.4.4.0",   # SWAP disponible (kB)
 }

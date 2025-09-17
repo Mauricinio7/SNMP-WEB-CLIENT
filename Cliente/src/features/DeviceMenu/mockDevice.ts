@@ -16,7 +16,7 @@ export async function fetchDeviceComponent(
 	type: DeviceComponentType,
 ): Promise<DeviceComponentData> {
 	if (type === "memory") {
-		const res = await fetch(`http://127.0.0.1:8000/snmp/memory/${id}`);
+		const res = await fetch(`http://127.0.0.1:8000/snmp/memorypreview/${id}`);
 		if (!res.ok) {
 			throw new Error(`Error ${res.status}: no se pudo obtener la memoria de PC ${id}`);
 		}
