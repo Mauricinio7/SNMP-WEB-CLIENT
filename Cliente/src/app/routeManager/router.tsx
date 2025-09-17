@@ -6,6 +6,8 @@ import { LoaderFallback } from "../../shared/ui/LoaderFallback";
 const App = lazy(() => import("../App"));
 const MainPage = lazy(() => import("../../pages/MainPage"));
 const SecondPage = lazy(() => import("../../pages/SecondPage"));
+const DeviceDetailsPage = lazy(() => import("../../pages/DeviceDetailsPage"));
+const PcComponentPage = lazy(() => import("../../pages/PcComponentPage"));
 const NotFoundPage = lazy(() => import("../../pages/NotFoundPage"));
 
 const Fallback = <p style={{ padding: 16 }}>Cargando…</p>;
@@ -31,6 +33,22 @@ const routes: RouteObject[] = [
 				element: (
 					<Suspense fallback={Fallback}>
 						<SecondPage />
+					</Suspense>
+				),
+			},
+			{
+				path: "/pc/:id",
+				element: (
+					<Suspense fallback={Fallback}>
+						<DeviceDetailsPage />
+					</Suspense>
+				),
+			},
+			{
+				path: "/pc/:id/:component",
+				element: (
+					<Suspense fallback={Fallback}>
+						<PcComponentPage />
 					</Suspense>
 				),
 			},

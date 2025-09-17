@@ -6,14 +6,12 @@
 		"lib": ["ES2022", "DOM", "DOM.Iterable"],
 		"jsx": "react-jsx",
 
-		/* Bundler mode (recomendado para Vite + TS5) */
 		"module": "ESNext",
 		"moduleResolution": "Bundler",
 		"verbatimModuleSyntax": true,
 		"allowImportingTsExtensions": true,
 		"allowArbitraryExtensions": true,
 
-		/* Calidad / ergonomía */
 		"strict": true,
 		"skipLibCheck": true,
 		"noEmit": true,
@@ -21,17 +19,12 @@
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,
 
-		/* Tipos de Vite (import.meta, assets, etc.) */
 		"types": ["vite/client"],
 
-		/* (Opcional) Alias si los usas en Vite */
 		"baseUrl": ".",
 		"paths": {
-			"@shared/*": ["Cliente/src/shared/*"]
+			"@shared/*": ["./src/shared/*"]
 		}
 	},
-	"include": [
-		"Cliente/src",
-		"Cliente/src/types/**/*.d.ts" // ← asegúrate de que vea tus declaraciones
-	]
+	"include": ["Cliente/src", "Cliente/src/types/**/*.d.ts"]
 }

@@ -11,14 +11,12 @@
 	text-decoration: none;
 	padding: 18px 16px;
 	transition: transform 0.08s ease, box-shadow 0.2s ease, background 0.2s ease;
-	min-height: 360px;
+	min-height: 480px;
 }
-
 .card:hover {
 	transform: translateY(-2px);
 	box-shadow: var(--shadow-md);
 }
-
 .card:focus-visible {
 	outline: 3px solid rgba(99, 102, 241, 0.5);
 	outline-offset: 2px;
@@ -30,7 +28,6 @@
 	opacity: 0.9;
 	margin-bottom: 10px;
 }
-
 .name {
 	font-size: 1.05rem;
 	font-weight: 700;
@@ -42,17 +39,14 @@
 	gap: 10px;
 	margin: 0;
 }
-
 .row {
 	display: grid;
 	grid-template-columns: auto 1fr;
 	gap: 8px;
 }
-
 dt {
 	opacity: 0.8;
 }
-
 dd {
 	margin: 0;
 	font-weight: 500;
@@ -65,7 +59,6 @@ dd {
 	align-items: center;
 	padding-top: 16px;
 }
-
 .logoWrapper img {
 	max-width: 70%;
 	max-height: 140px;

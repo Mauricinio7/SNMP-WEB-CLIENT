@@ -2,6 +2,7 @@ import DeviceCard from "../features/MainMenu/DeviceCard";
 import s from "./styles/MainPage.module.css";
 
 export default function MainPage() {
+	//TODO: HardCoded devices, should be loaded from the server, just pase the id
 	const devices = [
 		{
 			id: 1,
@@ -10,9 +11,27 @@ export default function MainPage() {
 			cpu: "Intel Core i7 8750H",
 			memory: "8 GB",
 		},
-		{ id: 2, name: "PC-LAB-02", os: "Windows 11 Pro", cpu: "Intel Core i5 11400", memory: "16 GB" },
-		{ id: 3, name: "SRV-NOC-03", os: "Debian 12", cpu: "AMD Ryzen 5 5600X", memory: "32 GB" },
-		{ id: 4, name: "EDGE-04", os: "Kali Linux", cpu: "Intel Core i3 10100", memory: "8 GB" },
+		{
+			id: 2,
+			name: "PC-LAB-02",
+			os: "Windows 11 Pro",
+			cpu: "Intel Core i5 11400",
+			memory: "16 GB",
+		},
+		{
+			id: 3,
+			name: "SRV-NOC-03",
+			os: "Debian 12",
+			cpu: "AMD Ryzen 5 5600X",
+			memory: "32 GB",
+		},
+		{
+			id: 4,
+			name: "EDGE-04",
+			os: "Kali Linux",
+			cpu: "Intel Core i3 10100",
+			memory: "8 GB",
+		},
 		{
 			id: 5,
 			name: "WORKSTATION-05",
@@ -49,6 +68,10 @@ export default function MainPage() {
 			os: "Mac Os Ventura 13.4",
 			cpu: "M4 10-core Apple Silicon",
 			memory: "16 GB",
+		},
+		{
+			id: 12,
+			name: "iMac de Ana",
 		},
 	];
 

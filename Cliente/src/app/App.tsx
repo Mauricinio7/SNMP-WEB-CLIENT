@@ -1,6 +1,15 @@
-import { Outlet, NavLink } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { PAGE_PATH } from "./routeManager/pages.paths";
+import { pcPath } from "./routeManager/pages.paths";
 import style from "../shared/styles/AppLayout.module.css";
+import PillLink from "../shared/ui/PillLink";
+
+const pcs = [
+	{ to: pcPath(1), label: "PC 1" },
+	{ to: pcPath(2), label: "PC 2" },
+	{ to: pcPath(3), label: "PC 3" },
+	{ to: pcPath(4), label: "PC 4" },
+];
 
 export default function App() {
 	return (
@@ -9,49 +18,17 @@ export default function App() {
 				<header className={style.header}>
 					<div className={style.headerRow}>
 						<div className={style.leftGroup}>
-							<NavLink
-								to={PAGE_PATH.main}
-								className={({ isActive }) =>
-									[style.pill, isActive ? style.pillActive : ""].join(" ").trim()
-								}
-							>
+							<PillLink to={PAGE_PATH.main} aria-label="Ir al menú principal">
 								Menu principal
-							</NavLink>
+							</PillLink>
 						</div>
 
 						<nav className={style.centerGroup} aria-label="PCs">
-							<NavLink
-								to={PAGE_PATH.main}
-								className={({ isActive }) =>
-									[style.pill, isActive ? style.pillActive : ""].join(" ").trim()
-								}
-							>
-								PC 1
-							</NavLink>
-							<NavLink
-								to={PAGE_PATH.second}
-								className={({ isActive }) =>
-									[style.pill, isActive ? style.pillActive : ""].join(" ").trim()
-								}
-							>
-								PC 2
-							</NavLink>
-							<NavLink
-								to="/pc3"
-								className={({ isActive }) =>
-									[style.pill, isActive ? style.pillActive : ""].join(" ").trim()
-								}
-							>
-								PC 3
-							</NavLink>
-							<NavLink
-								to="/pc4"
-								className={({ isActive }) =>
-									[style.pill, isActive ? style.pillActive : ""].join(" ").trim()
-								}
-							>
-								PC 4
-							</NavLink>
+							{pcs.map((p) => (
+								<PillLink key={p.label} to={p.to}>
+									{p.label}
+								</PillLink>
+							))}
 						</nav>
 
 						<div />
