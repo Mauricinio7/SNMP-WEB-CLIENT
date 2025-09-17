@@ -7,7 +7,10 @@ const App = lazy(() => import("../App"));
 const MainPage = lazy(() => import("../../pages/MainPage"));
 const SecondPage = lazy(() => import("../../pages/SecondPage"));
 const DeviceDetailsPage = lazy(() => import("../../pages/DeviceDetailsPage"));
-const PcComponentPage = lazy(() => import("../../pages/PcComponentPage"));
+const CPUDetailsPage = lazy(() => import("../../pages/ CPUDetailsPage"));
+const MemoryDetailsPage = lazy(() => import("../../pages/MemoryDetailsPage"));
+const DiskDetailsPage = lazy(() => import("../../pages/DiskDetailsPage"));
+const SystemDetailsPage = lazy(() => import("../../pages/SystemDetailsPage"));
 const NotFoundPage = lazy(() => import("../../pages/NotFoundPage"));
 
 const Fallback = <p style={{ padding: 16 }}>Cargando…</p>;
@@ -45,13 +48,38 @@ const routes: RouteObject[] = [
 				),
 			},
 			{
-				path: "/pc/:id/:component",
+				path: "/pc/:id/cpu",
 				element: (
 					<Suspense fallback={Fallback}>
-						<PcComponentPage />
+						<CPUDetailsPage />
 					</Suspense>
 				),
 			},
+			{
+				path: "/pc/:id/memory",
+				element: (
+					<Suspense fallback={Fallback}>
+						<MemoryDetailsPage />
+					</Suspense>
+				),
+			},
+			{
+				path: "/pc/:id/disk",
+				element: (
+					<Suspense fallback={Fallback}>
+						<DiskDetailsPage />
+					</Suspense>
+				),
+			},
+			{
+				path: "/pc/:id/system",
+				element: (
+					<Suspense fallback={Fallback}>
+						<SystemDetailsPage />
+					</Suspense>
+				),
+			},
+
 			{
 				path: "*",
 				element: (

@@ -1,29 +1,14 @@
+// src/features/MainMenu/DeviceComponentCard.tsx
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import style from "./DeviceComponentCard.module.css";
-import { pcComponentPath } from "../../app/routeManager/pages.paths";
-import { useEffect, useState } from "react";
+import { cpuPath, memoryPath, diskPath, systemPath } from "../../app/routeManager/pages.paths";
 
-export type DeviceComponentType = "cpu" | "memory" | "disk" | "system";
-
-// TODO: Replace with real fetch from server
-async function fetchMock(id: number, type: DeviceComponentType) {
-	await new Promise((r) => setTimeout(r, 250));
-	switch (type) {
-		case "cpu":
-			return {
-				model: "Intel Core i7 8750H",
-				usage: "10%",
-				cores: "6, 12 hilos",
-				uptime: "12 horas",
-			};
-		case "memory":
-			return { size: "8 gb", used: "4 gb", percent: "50%" };
-		case "disk":
-			return { size: "2 tb", used: "50%", write: "500 mb/s", read: "0 mb/s" };
-		case "system":
-			return { name: "AN-515-52STMP1", uptime: "15 horas", cpuTemp: "50°", gpuTemp: "47°" };
-	}
-}
+import {
+	fetchDeviceComponent,
+	type DeviceComponentType,
+	type DeviceComponentData,
+} from "./mockDevice";
 
 const TITLE: Record<DeviceComponentType, string> = {
 	cpu: "CPU",
@@ -38,115 +23,130 @@ type Props = {
 };
 
 export default function DeviceComponentCard({ id, type }: Props) {
-	const [data, setData] = useState<any | null>(null);
+	const [data, setData] = useState<DeviceComponentData | null>(null);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		let alive = true;
 		setLoading(true);
-		fetchMock(id, type).then((d) => {
-			if (alive) {
-				setData(d);
-				setLoading(false);
-			}
-		});
+		fetchDeviceComponent(id, type)
+			.then((d) => {
+				if (alive) {
+					setData(d);
+					setLoading(false);
+				}
+			})
+			.catch(() => {
+				if (alive) setLoading(false);
+			});
 		return () => {
 			alive = false;
 		};
 	}, [id, type]);
 
+	const href = (() => {
+		switch (type) {
+			case "cpu":
+				return cpuPath(id);
+			case "memory":
+				return memoryPath(id);
+			case "disk":
+				return diskPath(id);
+			case "system":
+				return systemPath(id);
+		}
+	})();
+
 	return (
-		<Link
-			to={pcComponentPath(id, type)}
-			className={style.card}
-			aria-label={`Abrir ${TITLE[type]} de PC ${id}`}
-		>
+		<Link to={href} className={style.card} aria-label={`Abrir ${TITLE[type]} de PC ${id}`}>
 			<div className={style.header}>{TITLE[type]}</div>
 
 			{loading ? (
 				<p className={style.name}>Cargando…</p>
-			) : (
+			) : data ? (
 				<>
-					{type === "cpu" && (
+					{data.type === "cpu" && (
 						<dl className={style.meta}>
 							<div className={style.row}>
 								<dt>Modelo:</dt>
-								<dd>{data.model}</dd>
+								<dd>{data.data.model}</dd>
 							</div>
 							<div className={style.row}>
 								<dt>Uso:</dt>
-								<dd>{data.usage}</dd>
+								<dd>{data.data.usage}%</dd>
 							</div>
 							<div className={style.row}>
 								<dt>Cores:</dt>
-								<dd>{data.cores}</dd>
+								<dd>{data.data.cores}</dd>
 							</div>
 							<div className={style.row}>
 								<dt>Tiempo:</dt>
-								<dd>{data.uptime}</dd>
+								<dd>{data.data.uptime}</dd>
 							</div>
 						</dl>
 					)}
 
-					{type === "memory" && (
+					{data.type === "memory" && (
 						<dl className={style.meta}>
 							<div className={style.row}>
 								<dt>Tamaño:</dt>
-								<dd>{data.size}</dd>
+								<dd>{data.data.size}</dd>
 							</div>
 							<div className={style.row}>
 								<dt>Uso:</dt>
-								<dd>{data.used}</dd>
+								<dd>{data.data.used}</dd>
 							</div>
 							<div className={style.row}>
 								<dt>Porcentaje:</dt>
-								<dd>{data.percent}</dd>
+								<dd>{data.data.percent}%</dd>
 							</div>
 						</dl>
 					)}
 
-					{type === "disk" && (
+					{data.type === "disk" && (
 						<dl className={style.meta}>
 							<div className={style.row}>
 								<dt>Tamaño:</dt>
-								<dd>{data.size}</dd>
+								<dd>{data.data.size}</dd>
 							</div>
 							<div className={style.row}>
 								<dt>Usado:</dt>
-								<dd>{data.used}</dd>
+								<dd>{data.data.used}</dd>
 							</div>
 							<div className={style.row}>
 								<dt>Escritura:</dt>
-								<dd>{data.write}</dd>
+								<dd>{data.data.write}</dd>
 							</div>
 							<div className={style.row}>
 								<dt>Lectura:</dt>
-								<dd>{data.read}</dd>
+								<dd>{data.data.read}</dd>
 							</div>
 						</dl>
 					)}
 
-					{type === "system" && (
+					{data.type === "system" && (
 						<dl className={style.meta}>
 							<div className={style.row}>
 								<dt>Nombre:</dt>
-								<dd>{data.name}</dd>
+								<dd>{data.data.name}</dd>
 							</div>
 							<div className={style.row}>
 								<dt>Uptime:</dt>
-								<dd>{data.uptime}</dd>
+								<dd>{data.data.uptime}</dd>
 							</div>
 							<div className={style.row}>
 								<dt>Temperatura CPU:</dt>
-								<dd>{data.cpuTemp}</dd>
+								<dd>{data.data.cpuTemp}</dd>
 							</div>
 							<div className={style.row}>
 								<dt>Temperatura GPU:</dt>
-								<dd>{data.gpuTemp}</dd>
+								<dd>{data.data.gpuTemp}</dd>
 							</div>
 						</dl>
 					)}
 				</>
+			) : (
+				<p style={{ color: "red" }}>Error al cargar datos</p>
 			)}
 		</Link>
 	);
