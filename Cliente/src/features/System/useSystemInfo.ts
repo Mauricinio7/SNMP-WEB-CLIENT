@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchSystemSnapshot } from "./system.service.api";
-import { SystemSnapshot } from "./types";
+import { fetchSystemSnapshot, type SystemSnapshot } from "./systemInfoService";
 
 export function useSystemInfo(pcId: number) {
   const [data, setData] = useState<SystemSnapshot | null>(null);
