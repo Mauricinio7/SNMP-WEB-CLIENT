@@ -1,0 +1,61 @@
+.wrapper {
+	padding: 24px 32px 40px;
+}
+
+.title {
+	text-align: center;
+	margin: 16px 0 32px;
+	font-size: 2rem;
+	font-weight: 800;
+}
+
+.centerDim {
+	text-align: center;
+	opacity: 0.7;
+}
+
+.centerErr {
+	text-align: center;
+	color: #b91c1c;
+}
+
+.cards {
+	display: grid;
+	gap: 32px;
+	grid-template-columns: 1fr;
+	width: 100%;
+}
+
+.card {
+	background: var(--pill-bg);
+	border: 1px solid var(--pill-border);
+	border-radius: 20px;
+	box-shadow: var(--shadow-md);
+	padding: 28px;
+	font-size: 1.05rem;
+}
+
+.cardTitle {
+	margin: 0 0 16px;
+	font-size: 1.4rem;
+	font-weight: 700;
+	text-align: left;
+}
+
+.dl {
+	margin: 0;
+	display: grid;
+	gap: 8px;
+}
+
+.gaugeBox {
+	margin-top: 18px;
+	display: grid;
+	place-items: center;
+}
+
+@media (min-width: 900px) {
+	.cards {
+		grid-template-columns: 1fr 1fr;
+	}
+}

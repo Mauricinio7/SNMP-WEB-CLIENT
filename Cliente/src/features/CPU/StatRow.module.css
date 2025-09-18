@@ -1,0 +1,15 @@
+.row {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 14px;
+	margin-bottom: 18px;
+}
+
+.label {
+	opacity: 0.8;
+}
+
+.value {
+	margin: 0;
+	font-weight: 700;
+}

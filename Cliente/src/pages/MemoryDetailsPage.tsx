@@ -1,7 +1,7 @@
 import { useParams, Navigate } from "react-router-dom";
 import { useMemorySeries, formatBytes } from "../features/Memory/useMemorySeries";
 import StatRow from "../features/Memory/StatRow";
-import BarGauge from "../shared/ui/BarGauge"; // 👈 importa tu nuevo componente
+import BarGauge from "../shared/ui/BarGauge";
 import style from "./styles/MemoryDetailsPage.module.css";
 
 export default function MemoryDetailsPage() {
@@ -19,7 +19,6 @@ export default function MemoryDetailsPage() {
 			{error && <p style={{ textAlign: "center", color: "#b91c1c" }}>Error al cargar datos</p>}
 			{!loading && data && (
 				<div className={style.cards}>
-
 					<article className={style.card}>
 						<h3 className={style.cardTitle}>Resumen RAM</h3>
 						<dl style={{ margin: 0, display: "grid", gap: 8 }}>
