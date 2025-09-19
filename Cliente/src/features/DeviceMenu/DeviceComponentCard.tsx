@@ -87,13 +87,13 @@ export default function DeviceComponentCard({ id, type }: Props) {
 				label: "Uso Memoria",
 			};
 		}
+
 		if (data.type === "disk") {
-			const raw = (data.data as any).used;
-			const val = typeof raw === "string" ? parseFloat(raw) : Number(raw);
+			const val = Number(data.data.usedPct) || 0;
 			return {
 				show: true as const,
 				kind: "radial" as const,
-				value: isNaN(val) ? 0 : val,
+				value: val,
 				unit: "%",
 				label: "Uso Disco",
 			};
@@ -162,21 +162,36 @@ export default function DeviceComponentCard({ id, type }: Props) {
 					{data.type === "disk" && (
 						<dl className={style.meta}>
 							<div className={style.row}>
-								<dt>Tamaño:</dt>
-								<dd>{data.data.size}</dd>
+								<dt>Particiones:</dt>
+								<dd>{data.data.partitions.length}</dd>
 							</div>
 							<div className={style.row}>
-								<dt>Usado:</dt>
-								<dd>{data.data.used}</dd>
+								<dt>Tamaño total:</dt>
+								<dd>{(data.data.totalKB / (1024 * 1024)).toFixed(2)} GB</dd>
 							</div>
 							<div className={style.row}>
-								<dt>Escritura:</dt>
-								<dd>{data.data.write}</dd>
+								<dt>Usado total:</dt>
+								<dd>
+									{(data.data.usedTotalKB / (1024 * 1024)).toFixed(2)} GB ({data.data.usedPct}%)
+								</dd>
 							</div>
-							<div className={style.row}>
-								<dt>Lectura:</dt>
-								<dd>{data.data.read}</dd>
-							</div>
+							{(() => {
+								const { sizeKB, usedKB, partitions } = data.data;
+								if (!sizeKB.length) return null;
+								const idx = usedKB.indexOf(Math.max(...usedKB));
+								const pUsedPct = sizeKB[idx] ? Math.round((usedKB[idx] / sizeKB[idx]) * 100) : 0;
+								return (
+									<>
+										<div className={style.row}>
+											<dt>Más usada (partición #{partitions[idx] ?? idx}):</dt>
+											<dd>
+												{(usedKB[idx] / (1024 * 1024)).toFixed(2)} GB /{" "}
+												{(sizeKB[idx] / (1024 * 1024)).toFixed(2)} GB ({pUsedPct}%)
+											</dd>
+										</div>
+									</>
+								);
+							})()}
 						</dl>
 					)}
 
