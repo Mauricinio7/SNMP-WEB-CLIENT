@@ -18,18 +18,53 @@ export default function CpuDetailsPage() {
 			{loading && <p className={style.centerDim}>Cargando…</p>}
 			{error && <p className={style.centerErr}>Error al cargar datos</p>}
 
-			{!loading && data && (
+			{!loading && (
 				<div className={style.cards}>
 					<article className={style.card}>
 						<h3 className={style.cardTitle}>Estado</h3>
 						<dl className={style.dl}>
-							<CpuStatRow label="Uso" value={`${data.usagePct}%`} />
-							<CpuStatRow label="Cores" value={String(data.cores)} />
-							<CpuStatRow label="Tiempo" value={formatUptime(data.uptimeSec)} />
+							<CpuStatRow
+								label="Uso Promedio"
+								value={`${data?.cpu_usage_avg ?? 0}%`}
+							/>
+							<CpuStatRow
+								label="Uso Global"
+								value={`${data?.cpu_global_usage_percent ?? 0}%`}
+							/>
+							<CpuStatRow
+								label="Idle"
+								value={`${data?.cpu_idle_percent ?? 0}%`}
+							/>
+							<CpuStatRow
+								label="Cores"
+								value={String(data?.cpu_cores ?? 0)}
+							/>
+							<CpuStatRow
+								label="Tiempo"
+								value={formatUptime(Number(data?.uptime_ticks) || 0)}
+							/>
 						</dl>
+
 						<div className={style.gaugeBox}>
-							<RadialGauge value={data.usagePct} unit="%" label="Uso CPU" />
+							<RadialGauge
+								value={data?.cpu_global_usage_percent ?? 0}
+								unit="%"
+								label="Uso CPU"
+							/>
 						</div>
+					</article>
+
+					<article className={style.card}>
+						<h3 className={style.cardTitle}>Uso por Core</h3>
+						<dl className={style.dl}>
+							{(data?.cpu_usage_per_core ?? []).map((val, i) => (
+								<CpuStatRow key={i} label={`Core ${i}`} value={`${val}%`} />
+							))}
+							{(!data?.cpu_usage_per_core ||
+								data.cpu_usage_per_core.length === 0) && (
+								<CpuStatRow label="Sin datos" value="0%" />
+							)}
+						</dl>
 					</article>
 				</div>
 			)}

@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
-import { fetchCpuSnapshot, type CpuSnapshot } from "./cpu.service.mock";
+
+export type CpuSnapshot = {
+	ts: number;
+	cpu_cores: number;
+	cpu_usage_per_core: number[];
+	cpu_usage_avg: number;
+	uptime_ticks: string;
+	cpu_idle_percent: number;
+	cpu_global_usage_percent: number;
+};
 
 export function useCpuInfo(pcId: number) {
 	const [data, setData] = useState<CpuSnapshot | null>(null);
@@ -11,10 +20,14 @@ export function useCpuInfo(pcId: number) {
 		setLoading(true);
 		setError(null);
 
-		fetchCpuSnapshot(pcId)
-			.then((d) => {
+		fetch(`http://127.0.0.1:8000/snmp/cpu/${pcId}`)
+			.then(async (res) => {
+				if (!res.ok) throw new Error(`Error ${res.status}`);
+				return res.json();
+			})
+			.then((json) => {
 				if (alive) {
-					setData(d);
+					setData({ ts: Date.now(), ...json });
 					setLoading(false);
 				}
 			})

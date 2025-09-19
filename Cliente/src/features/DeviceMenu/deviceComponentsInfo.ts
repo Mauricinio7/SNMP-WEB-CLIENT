@@ -2,10 +2,19 @@ export type DeviceComponentType = "cpu" | "memory" | "disk" | "system" | "networ
 
 export type MemoryData = { size: string; used: string; percent: number };
 
+export type CpuData = {
+	cores: number;
+	usagePerCore: number[];
+	usageAvg: number;
+	globalUsage: number;
+	idlePercent: number;
+	uptimeTicks: string;
+};
+
 export type DeviceComponentData =
 	| { type: "memory"; data: MemoryData }
+	| { type: "cpu"; data: CpuData }
 	// TODO: This is a mock
-	| { type: "cpu"; data: any }
 	| { type: "disk"; data: any }
 	| { type: "system"; data: any }
 	| { type: "network"; data: any };
@@ -34,10 +43,27 @@ export async function fetchDeviceComponent(
 		};
 	}
 
-	//TODO: This is a mock
 	if (type === "cpu") {
-		return { type, data: { model: "Intel Core i7", usage: 10, cores: "6", uptime: "5h" } };
+		const res = await fetch(`http://127.0.0.1:8000/snmp/cpu/${id}`);
+		if (!res.ok) {
+			throw new Error(`Error ${res.status}: no se pudo obtener la CPU de PC ${id}`);
+		}
+		const json = await res.json();
+
+		return {
+			type: "cpu",
+			data: {
+				cores: Number(json.cpu_cores) || 0,
+				usagePerCore: json.cpu_usage_per_core ?? [],
+				usageAvg: Number(json.cpu_usage_avg) || 0,
+				globalUsage: Number(json.cpu_global_usage_percent) || 0,
+				idlePercent: Number(json.cpu_idle_percent) || 0,
+				uptimeTicks: json.uptime_ticks ?? "0",
+			},
+		};
 	}
+
+	//TODO: This is a mock
 	if (type === "disk") {
 		return { type, data: { size: "1 TB", used: "40%", write: "200 MB/s", read: "150 MB/s" } };
 	}

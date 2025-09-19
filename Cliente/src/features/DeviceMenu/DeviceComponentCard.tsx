@@ -68,7 +68,7 @@ export default function DeviceComponentCard({ id, type }: Props) {
 	const gauges = useMemo(() => {
 		if (!data) return { show: false as const };
 		if (data.type === "cpu") {
-			const val = Number((data.data as any).usage) || 0;
+			const val = Number(data.data.globalUsage) || 0;
 			return {
 				show: true as const,
 				kind: "radial" as const,
@@ -124,20 +124,20 @@ export default function DeviceComponentCard({ id, type }: Props) {
 					{data.type === "cpu" && (
 						<dl className={style.meta}>
 							<div className={style.row}>
-								<dt>Modelo:</dt>
-								<dd>{data.data.model}</dd>
-							</div>
-							<div className={style.row}>
-								<dt>Uso:</dt>
-								<dd>{(data.data as any).usage}%</dd>
-							</div>
-							<div className={style.row}>
 								<dt>Cores:</dt>
 								<dd>{data.data.cores}</dd>
 							</div>
 							<div className={style.row}>
-								<dt>Tiempo:</dt>
-								<dd>{data.data.uptime}</dd>
+								<dt>Uso promedio:</dt>
+								<dd>{data.data.usageAvg}%</dd>
+							</div>
+							<div className={style.row}>
+								<dt>Uso global:</dt>
+								<dd>{data.data.globalUsage}%</dd>
+							</div>
+							<div className={style.row}>
+								<dt>Idle:</dt>
+								<dd>{data.data.idlePercent}%</dd>
 							</div>
 						</dl>
 					)}
