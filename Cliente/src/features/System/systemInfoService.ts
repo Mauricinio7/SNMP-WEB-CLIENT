@@ -24,26 +24,26 @@ async function fetchJson<T>(url: string, ms = 4000): Promise<T> {
 
 export async function fetchSystemSnapshot(pcId: number): Promise<SystemSnapshot> {
   type Api = {
-    hostname: string;
-    description: string;
-    uptime_seconds: number;
+    operation_system: string;
+    operation_uptime: string;
     contact?: string | null;
+    device_name: string;
     location?: string | null;
-    temperature_c?: number | null;
+    temperature?: string | null; 
   };
 
   const payload = await fetchJson<Api>(`${API_BASE}/snmp/system/${pcId}`);
 
   const out: SystemSnapshot = {
     ts: Date.now(),
-    hostname: payload.hostname,
-    description: payload.description,
-    uptimeSeconds: payload.uptime_seconds,
+    hostname: payload.device_name,
+    description: payload.operation_system,
+    uptimeSeconds: parseInt(payload.operation_uptime, 10), 
+    temperatureC: payload.temperature ? parseFloat(payload.temperature) : undefined,
   };
 
   if (payload.contact) out.contact = payload.contact;
   if (payload.location) out.location = payload.location;
-  if (typeof payload.temperature_c === "number") out.temperatureC = payload.temperature_c;
 
   return out;
 }

@@ -11,12 +11,18 @@ export type CpuData = {
 	uptimeTicks: string;
 };
 
+export type SystemData = {
+	name: string;
+	uptime: string;
+	cpuTemp: number;
+  };
+
 export type DeviceComponentData =
 	| { type: "memory"; data: MemoryData }
 	| { type: "cpu"; data: CpuData }
+	| { type: "system"; data: SystemData }
 	// TODO: This is a mock
 	| { type: "disk"; data: any }
-	| { type: "system"; data: any }
 	| { type: "network"; data: any };
 
 export async function fetchDeviceComponent(
@@ -63,13 +69,28 @@ export async function fetchDeviceComponent(
 		};
 	}
 
+	if (type === "system") {
+		const res = await fetch(`http://127.0.0.1:8000/snmp/system/${id}`);
+		if (!res.ok) {
+			throw new Error(`Error ${res.status}: no se pudo obtener el sistema de PC ${id}`);
+		}
+		const json = await res.json();
+	
+		return {
+			type: "system",
+			data: {
+				name: json.device_name ?? "Desconocido",
+				uptime: json.operation_uptime ?? "0",
+				cpuTemp: json.temperatureC ?? 0,
+	        }
+	    };
+	}
+
 	//TODO: This is a mock
 	if (type === "disk") {
 		return { type, data: { size: "1 TB", used: "40%", write: "200 MB/s", read: "150 MB/s" } };
 	}
-	if (type === "system") {
-		return { type, data: { name: "Server", uptime: "12h", cpuTemp: "45°", gpuTemp: "42°" } };
-	}
+
 	if (type === "network") {
 		return { type, data: { iface: "eth0", linkSpeedMbps: 1000, upMbps: 20, downMbps: 80 } };
 	}

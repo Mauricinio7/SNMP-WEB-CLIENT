@@ -194,10 +194,6 @@ export default function DeviceComponentCard({ id, type }: Props) {
 								<dt>Temperatura CPU:</dt>
 								<dd>{data.data.cpuTemp}</dd>
 							</div>
-							<div className={style.row}>
-								<dt>Temperatura GPU:</dt>
-								<dd>{data.data.gpuTemp}</dd>
-							</div>
 						</dl>
 					)}
 
