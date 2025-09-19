@@ -1,31 +1,35 @@
 export type Disk = {
 	id: number;
 	partitions: {
-		name: string;
-		size: string;
-		used: string;
-		free: string;
+		address: string; 
+		device: string;  
+		error: string;   
 	}[];
 };
 
 export async function fetchDiskById(id: number): Promise<Disk> {
 	const res = await fetch(`http://127.0.0.1:8000/snmp/disk/data/${id}`);
 	if (!res.ok) {
-		throw new Error(`Error ${res.status}: no se pudo obtener la información de disco de la PC ${id}`);
+		throw new Error(
+			`Error ${res.status}: no se pudo obtener la información de disco de la PC ${id}`
+		);
 	}
 	const json = await res.json();
+	console.log("Respuesta SNMP Disco JSON:", json);
 
-	const partitions = (json.disk_partitions || []).map((part: string, idx: number) => ({
-		name: part,
-		size: ((json.disk_partitions_size?.[idx] || 0) / (1024 * 1024)).toFixed(1) + " GB",
-		used: ((json.disk_partitions_used?.[idx] || 0) / (1024 * 1024)).toFixed(1) + " GB",
-		free: ((json.disk_partitions_free?.[idx] || 0) / (1024 * 1024)).toFixed(1) + " GB",
-	}));
+	const partitions = (json.disk_partitions_address || []).map(
+		(address: string, idx: number) => ({
+			address,
+			device: json.disk_partitions_devices?.[idx] ?? "Desconocido",
+			error: json.disk_partitions_errors?.[idx] ?? "Desconocido",
+		})
+	);
 
 	const disk: Disk = {
 		id,
 		partitions,
 	};
 
+	console.log("Objeto Disk procesado:", disk);
 	return disk;
 }

@@ -26,9 +26,6 @@ export default function DiskCard({ id }: Props) {
 		};
 	}, [id]);
 
-	const model = status === "ready" ? data?.model ?? "Desconocido" : "Cargando …";
-	const size = status === "ready" ? data?.size ?? "Desconocido" : "Cargando …";
-
 	return (
 		<div className={style.card} aria-label={`Detalles del Disco ${id}`}>
 			<div className={style.header}>Disco {id}:</div>
@@ -37,16 +34,24 @@ export default function DiskCard({ id }: Props) {
 				<p style={{ color: "#b91c1c", fontWeight: 600, margin: 0 }}>
 					No fue posible cargar los datos.
 				</p>
+			) : status === "loading" ? (
+				<p>Cargando …</p>
 			) : (
 				<dl className={style.meta}>
-					<div className={style.row}>
-						<dt>Modelo:</dt>
-						<dd>{model}</dd>
-					</div>
-					<div className={style.row}>
-						<dt>Tamaño:</dt>
-						<dd>{size}</dd>
-					</div>
+					{data?.partitions.length ? (
+						data.partitions.map((p, idx) => (
+							<div className={style.row} key={idx}>
+								<dt>Partición {idx + 1}:</dt>
+								<dd>
+									<strong>Dirección:</strong> {p.address || "Desconocido"} <br />
+									<strong>Dispositivo:</strong> {p.device || "Desconocido"} <br />
+									<strong>Error:</strong> {p.error || "Ninguno"}
+								</dd>
+							</div>
+						))
+					) : (
+						<p>No se encontraron particiones.</p>
+					)}
 				</dl>
 			)}
 		</div>

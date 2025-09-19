@@ -11,7 +11,7 @@
 	text-decoration: none;
 	padding: 18px 16px;
 	transition: transform 0.08s ease, box-shadow 0.2s ease, background 0.2s ease;
-	min-height: 280px;
+	min-height: 400px;
 }
 .card:hover {
 	transform: translateY(-2px);
