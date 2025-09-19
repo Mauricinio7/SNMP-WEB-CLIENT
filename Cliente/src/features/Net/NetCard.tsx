@@ -26,11 +26,7 @@ export default function NetCard({ id }: Props) {
 		};
 	}, [id]);
 
-	const ipAddress = status === "ready" ? data?.ipAddress ?? "Desconocido" : "Cargando …";
-	const subnetMask = status === "ready" ? data?.subnetMask ?? "Desconocido" : "Cargando …";
-	const webType = status === "ready" ? data?.webType ?? "Desconocido" : "Cargando …";
-	const forwarding = status === "ready" ? data?.forwarding ?? "Desconocido" : "Cargando …";
-	const tcpProtocol = status === "ready" ? data?.tcpProtocol ?? "Desconocido" : "Cargando …";
+	if (!data && status !== "ready") return <p>Cargando…</p>;
 
 	return (
 		<div className={style.card} aria-label={`Detalles de Red de PC ${id}`}>
@@ -43,24 +39,40 @@ export default function NetCard({ id }: Props) {
 			) : (
 				<dl className={style.meta}>
 					<div className={style.row}>
-						<dt>IP:</dt>
-						<dd>{ipAddress}</dd>
+						<dt>Paquetes recibidos:</dt>
+						<dd>{data?.recievedPackets.join(", ")}</dd>
 					</div>
 					<div className={style.row}>
-						<dt>Subred:</dt>
-						<dd>{subnetMask}</dd>
+						<dt>Paquetes enviados:</dt>
+						<dd>{data?.sentPackets.join(", ")}</dd>
 					</div>
 					<div className={style.row}>
-						<dt>Tipo Web:</dt>
-						<dd>{webType}</dd>
+						<dt>Retransm. mínima:</dt>
+						<dd>{data?.minimumRetransmissionsTime}</dd>
 					</div>
 					<div className={style.row}>
-						<dt>Forwarding:</dt>
-						<dd>{forwarding}</dd>
+						<dt>Retransm. máxima:</dt>
+						<dd>{data?.maximumRetransmissionsTime}</dd>
 					</div>
 					<div className={style.row}>
-						<dt>TCP:</dt>
-						<dd>{tcpProtocol}</dd>
+						<dt>Conexiones TCP máx.:</dt>
+						<dd>{data?.maximumTcpConnections}</dd>
+					</div>
+					<div className={style.row}>
+						<dt>Conexiones TCP hechas:</dt>
+						<dd>{data?.tcpConnectionsMade}</dd>
+					</div>
+					<div className={style.row}>
+						<dt>Conexiones TCP activas:</dt>
+						<dd>{data?.activeTcpConnections}</dd>
+					</div>
+					<div className={style.row}>
+						<dt>Paquetes UDP recibidos:</dt>
+						<dd>{data?.udpPacketsReceived.join(", ")}</dd>
+					</div>
+					<div className={style.row}>
+						<dt>Errores UDP recibidos:</dt>
+						<dd>{data?.udpReceiveErrors.join(", ")}</dd>
 					</div>
 				</dl>
 			)}
