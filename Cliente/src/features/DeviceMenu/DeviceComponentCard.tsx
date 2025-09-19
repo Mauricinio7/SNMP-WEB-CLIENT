@@ -68,13 +68,13 @@ export default function DeviceComponentCard({ id, type }: Props) {
 	const gauges = useMemo(() => {
 		if (!data) return { show: false as const };
 		if (data.type === "cpu") {
-			const val = Number(data.data.globalUsage) || 0;
+			const val = Number(data.data.usageAvg) || 0;
 			return {
 				show: true as const,
 				kind: "radial" as const,
 				value: val,
 				unit: "%",
-				label: "Uso CPU",
+				label: "Uso promedio CPU",
 			};
 		}
 		if (data.type === "memory") {
@@ -215,53 +215,35 @@ export default function DeviceComponentCard({ id, type }: Props) {
 					{data.type === "network" && (
 						<dl className={style.meta}>
 							<div className={style.row}>
-								<dt>Interfaz:</dt>
-								<dd>{data.data.iface}</dd>
+								<dt>IPs:</dt>
+								<dd>
+									{(data.data as any).ipList?.length ? (data.data as any).ipList.join(", ") : "-"}
+								</dd>
 							</div>
 							<div className={style.row}>
-								<dt>Link:</dt>
-								<dd>{data.data.linkSpeedMbps} Mb/s</dd>
+								<dt>Máscaras:</dt>
+								<dd>
+									{(data.data as any).maskList?.length
+										? (data.data as any).maskList.join(", ")
+										: "-"}
+								</dd>
 							</div>
 							<div className={style.row}>
-								<dt>Subida:</dt>
-								<dd>{data.data.upMbps} Mb/s</dd>
+								<dt>Forwarding:</dt>
+								<dd>{(data.data as any).forwarding ? "Sí" : "No"}</dd>
 							</div>
 							<div className={style.row}>
-								<dt>Bajada:</dt>
-								<dd>{data.data.downMbps} Mb/s</dd>
+								<dt>TCP:</dt>
+								<dd>{(data.data as any).tcpEnabled ? "Activo" : "Inactivo"}</dd>
 							</div>
 						</dl>
 					)}
-
 					<div className={style.chart}>
 						{gauges.show && gauges.kind === "radial" && (
 							<RadialGauge value={gauges.value} unit={gauges.unit} label={gauges.label} />
 						)}
 						{gauges.show && gauges.kind === "bar" && (
 							<BarGauge value={gauges.value} unit={gauges.unit} label={gauges.label} />
-						)}
-
-						{data.type === "network" && (
-							<div
-								style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, width: "100%" }}
-							>
-								<BarGauge
-									value={data.data.upMbps}
-									max={data.data.linkSpeedMbps}
-									unit=" Mb/s"
-									label="Subida"
-									warnAt={Math.round(data.data.linkSpeedMbps * 0.6)}
-									dangerAt={Math.round(data.data.linkSpeedMbps * 0.85)}
-								/>
-								<BarGauge
-									value={data.data.downMbps}
-									max={data.data.linkSpeedMbps}
-									unit=" Mb/s"
-									label="Bajada"
-									warnAt={Math.round(data.data.linkSpeedMbps * 0.6)}
-									dangerAt={Math.round(data.data.linkSpeedMbps * 0.85)}
-								/>
-							</div>
 						)}
 					</div>
 				</>

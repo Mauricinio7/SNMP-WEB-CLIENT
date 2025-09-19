@@ -2,7 +2,7 @@ import DeviceCard from "../features/MainMenu/DeviceCard";
 import s from "./styles/MainPage.module.css";
 
 export default function MainPage() {
-	const deviceIds = [2];
+	const deviceIds = [1, 2, 3, 4];
 
 	return (
 		<section>

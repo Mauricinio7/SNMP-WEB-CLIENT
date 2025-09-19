@@ -28,12 +28,20 @@ export type SystemData = {
 	cpuTemp?: number;
 };
 
+export type NetworkPreviewData = {
+	ipList: string[];
+	maskList: string[];
+	forwarding: boolean;
+	tcpEnabled: boolean;
+	ifTypes: number[];
+};
+
 export type DeviceComponentData =
 	| { type: "memory"; data: MemoryData }
 	| { type: "cpu"; data: CpuData }
 	| { type: "disk"; data: DiskPreviewData }
 	| { type: "system"; data: SystemData }
-	| { type: "network"; data: any };
+	| { type: "network"; data: NetworkPreviewData };
 
 const API = "http://127.0.0.1:8000";
 
@@ -52,6 +60,13 @@ function formatUptimeFromTicks(ticks?: string | number): string | undefined {
 	if (h > 0) return `${h}h ${m}m ${s}s`;
 	if (m > 0) return `${m}m ${s}s`;
 	return `${s}s`;
+}
+
+function octetsToIPv4(s: string): string {
+	const bytes = Array.from(s, (ch) => ch.charCodeAt(0)).filter((n) => n >= 0 && n <= 255);
+	if (bytes.length === 4) return bytes.join(".");
+
+	return s;
 }
 
 export async function fetchDeviceComponent(
@@ -113,18 +128,35 @@ export async function fetchDeviceComponent(
 		const generalRes = await fetch(`${API}/snmp/general/${id}`);
 		if (!generalRes.ok) throw new Error(`Error ${generalRes.status}: general de PC ${id}`);
 		const general = await generalRes.json();
-
 		let uptime: string | undefined;
 		let cpuTemp: number | undefined;
+
 		try {
-			const cpuRes = await fetch(`${API}/snmp/cpu/${id}`);
-			if (cpuRes.ok) {
-				const cpuJ = await cpuRes.json();
-				uptime = formatUptimeFromTicks(cpuJ.uptime_ticks);
-				const t = Number(cpuJ.cpu_temp_c ?? cpuJ.cpu_temp ?? NaN);
-				if (Number.isFinite(t)) cpuTemp = t;
+			const sysRes = await fetch(`${API}/snmp/system/${id}`);
+			if (sysRes.ok) {
+				const sys = await sysRes.json();
+
+				const normTemp = (v: unknown): number | undefined => {
+					const n = Number(v);
+					if (!Number.isFinite(n)) return undefined;
+
+					if (n > 1000) return Math.round(n / 1000);
+					if (n > 200) return Math.round(n / 10);
+					return Math.round(n);
+				};
+				cpuTemp = normTemp(sys.temperature);
 			}
 		} catch {}
+
+		if (!uptime) {
+			try {
+				const cpuRes = await fetch(`${API}/snmp/cpu/${id}`);
+				if (cpuRes.ok) {
+					const cpuJ = await cpuRes.json();
+					uptime = formatUptimeFromTicks(cpuJ.uptime_ticks);
+				}
+			} catch {}
+		}
 
 		const data: SystemData = {
 			name: String(general.device_name ?? "Desconocido"),
@@ -136,10 +168,29 @@ export async function fetchDeviceComponent(
 	}
 
 	if (type === "network") {
-		// (sigue mock mientras no tengas endpoint real)
+		const res = await fetch(`${API}/snmp/network/preview/${id}`);
+		if (!res.ok) throw new Error(`Error ${res.status}: no se pudo obtener red de PC ${id}`);
+		const j = (await res.json()) as {
+			web_type: string[];
+			ip_address: string[];
+			subnet_mask: string[];
+			forwarding?: string[];
+			tcp_protocol?: string;
+		};
+
+		const ipList = (j.ip_address ?? []).map(octetsToIPv4);
+		const maskList = (j.subnet_mask ?? []).map(octetsToIPv4);
+		const ifTypes = (j.web_type ?? []).map((x) => Number(x) || 0);
+
+		const forwarding = Array.isArray(j.forwarding)
+			? j.forwarding.some((x) => String(x) === "1")
+			: String(j.forwarding ?? "") === "1";
+
+		const tcpEnabled = String(j.tcp_protocol ?? "") === "1";
+
 		return {
 			type: "network",
-			data: { iface: "eth0", linkSpeedMbps: 1000, upMbps: 20, downMbps: 80 },
+			data: { ipList, maskList, forwarding, tcpEnabled, ifTypes },
 		};
 	}
 
