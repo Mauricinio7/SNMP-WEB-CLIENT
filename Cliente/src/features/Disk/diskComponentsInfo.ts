@@ -9,7 +9,7 @@ export type Disk = {
 };
 
 export async function fetchDiskById(id: number): Promise<Disk> {
-	const res = await fetch(`http://127.0.0.1:8000/snmp/disk_preview/${id}`);
+	const res = await fetch(`http://127.0.0.1:8000/snmp/disk/data/${id}`);
 	if (!res.ok) {
 		throw new Error(`Error ${res.status}: no se pudo obtener la información de disco de la PC ${id}`);
 	}

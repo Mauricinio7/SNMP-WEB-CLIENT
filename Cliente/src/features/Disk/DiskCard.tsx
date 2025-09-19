@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import style from "./DiskCard.module.css";
-import { fetchDiskById, type Disk } from "./disksInfoService";
+import style from "./DiskComponentCard.module.css";
+import { fetchDiskById, type Disk } from "./diskComponentsInfo";
 
 type Props = { id: number };
 

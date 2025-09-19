@@ -1,5 +1,5 @@
 import { useParams, Navigate } from "react-router-dom";
-import DiskCard from "../features/DiskMenu/DiskCard";
+import DiskCard from "../features/Disk/DiskCard";
 import s from "./styles/diskDetailsPage.module.css";
 
 export default function DiskDetailsPage() {
