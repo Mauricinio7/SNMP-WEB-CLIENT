@@ -1,4 +1,3 @@
-// src/features/DeviceMenu/deviceComponentsInfo.ts
 export type DeviceComponentType = "cpu" | "memory" | "disk" | "system" | "network";
 
 export type MemoryData = { size: string; used: string; percent: number };
@@ -9,10 +8,9 @@ export type CpuData = {
 	usageAvg: number;
 	globalUsage: number;
 	idlePercent: number;
-	uptimeTicks: string; // viene como string en tu API
+	uptimeTicks: string;
 };
 
-// Datos reales para el “preview” de disco
 export type DiskPreviewData = {
 	partitions: number[];
 	sizeKB: number[];
@@ -23,12 +21,11 @@ export type DiskPreviewData = {
 	usedPct: number;
 };
 
-// ✅ Datos reales para “system”
 export type SystemData = {
-	name: string; // device_name
-	os?: string; // os_description (opcional)
-	uptime?: string; // uptime ya formateado (opcional si no hay ticks)
-	cpuTemp?: number; // temperatura CPU en °C si tu endpoint la expone
+	name: string;
+	os?: string;
+	uptime?: string;
+	cpuTemp?: number;
 };
 
 export type DeviceComponentData =
@@ -40,11 +37,9 @@ export type DeviceComponentData =
 
 const API = "http://127.0.0.1:8000";
 
-// Helpers
 const toNums = (arr: string[]) => arr.map((x) => Number(x) || 0);
 const sum = (a: number[]) => a.reduce((p, c) => p + c, 0);
 
-// ticks (centésimas de segundo) → “12h 03m 10s”
 function formatUptimeFromTicks(ticks?: string | number): string | undefined {
 	const n = Number(ticks);
 	if (!Number.isFinite(n) || n < 0) return undefined;
@@ -114,14 +109,11 @@ export async function fetchDeviceComponent(
 		};
 	}
 
-	// ✅ REAL: System sin mock.
 	if (type === "system") {
-		// 1) /snmp/general/:id -> nombre/os
 		const generalRes = await fetch(`${API}/snmp/general/${id}`);
 		if (!generalRes.ok) throw new Error(`Error ${generalRes.status}: general de PC ${id}`);
-		const general = await generalRes.json(); // { device_name, os_description, ... }
+		const general = await generalRes.json();
 
-		// 2) /snmp/cpu/:id -> uptime_ticks (+ temp si la expones allí)
 		let uptime: string | undefined;
 		let cpuTemp: number | undefined;
 		try {
@@ -132,9 +124,7 @@ export async function fetchDeviceComponent(
 				const t = Number(cpuJ.cpu_temp_c ?? cpuJ.cpu_temp ?? NaN);
 				if (Number.isFinite(t)) cpuTemp = t;
 			}
-		} catch {
-			// si falla, solo devolvemos lo que haya
-		}
+		} catch {}
 
 		const data: SystemData = {
 			name: String(general.device_name ?? "Desconocido"),

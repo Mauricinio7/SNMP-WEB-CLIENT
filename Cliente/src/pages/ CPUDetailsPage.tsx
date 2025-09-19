@@ -1,5 +1,5 @@
 import { Navigate, useParams } from "react-router-dom";
-import { useCpuInfo, formatUptime } from "../features/CPU/useCpuInfo";
+import { useCpuInfo } from "../features/CPU/useCpuInfo";
 import CpuStatRow from "../features/CPU/StatRow";
 import RadialGauge from "../shared/ui/RadialGauge";
 import style from "./styles/CpuDetailsPage.module.css";
@@ -9,7 +9,7 @@ export default function CpuDetailsPage() {
 	const n = Number(id);
 	if (!id || !Number.isInteger(n) || n <= 0) return <Navigate to="/not-found" replace />;
 
-	const { data, loading, error } = useCpuInfo(n);
+	const { data, loading, error, uptimeLabel } = useCpuInfo(n);
 
 	return (
 		<section className={style.wrapper}>
@@ -23,34 +23,15 @@ export default function CpuDetailsPage() {
 					<article className={style.card}>
 						<h3 className={style.cardTitle}>Estado</h3>
 						<dl className={style.dl}>
-							<CpuStatRow
-								label="Uso Promedio"
-								value={`${data?.cpu_usage_avg ?? 0}%`}
-							/>
-							<CpuStatRow
-								label="Uso Global"
-								value={`${data?.cpu_global_usage_percent ?? 0}%`}
-							/>
-							<CpuStatRow
-								label="Idle"
-								value={`${data?.cpu_idle_percent ?? 0}%`}
-							/>
-							<CpuStatRow
-								label="Cores"
-								value={String(data?.cpu_cores ?? 0)}
-							/>
-							<CpuStatRow
-								label="Tiempo"
-								value={formatUptime(Number(data?.uptime_ticks) || 0)}
-							/>
+							<CpuStatRow label="Uso Promedio" value={`${data?.cpu_usage_avg ?? 0}%`} />
+							<CpuStatRow label="Uso Global" value={`${data?.cpu_global_usage_percent ?? 0}%`} />
+							<CpuStatRow label="Idle" value={`${data?.cpu_idle_percent ?? 0}%`} />
+							<CpuStatRow label="Cores" value={String(data?.cpu_cores ?? 0)} />
+							<CpuStatRow label="Tiempo" value={uptimeLabel} />
 						</dl>
 
 						<div className={style.gaugeBox}>
-							<RadialGauge
-								value={data?.cpu_global_usage_percent ?? 0}
-								unit="%"
-								label="Uso CPU"
-							/>
+							<RadialGauge value={data?.cpu_global_usage_percent ?? 0} unit="%" label="Uso CPU" />
 						</div>
 					</article>
 
@@ -60,8 +41,7 @@ export default function CpuDetailsPage() {
 							{(data?.cpu_usage_per_core ?? []).map((val, i) => (
 								<CpuStatRow key={i} label={`Core ${i}`} value={`${val}%`} />
 							))}
-							{(!data?.cpu_usage_per_core ||
-								data.cpu_usage_per_core.length === 0) && (
+							{(!data?.cpu_usage_per_core || data.cpu_usage_per_core.length === 0) && (
 								<CpuStatRow label="Sin datos" value="0%" />
 							)}
 						</dl>

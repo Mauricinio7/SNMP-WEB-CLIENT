@@ -2,40 +2,47 @@ import { useEffect, useState } from "react";
 import { fetchSystemSnapshot, type SystemSnapshot } from "./systemInfoService";
 
 export function useSystemInfo(pcId: number) {
-  const [data, setData] = useState<SystemSnapshot | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+	const [data, setData] = useState<SystemSnapshot | null>(null);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
-    let alive = true;
-    setLoading(true);
-    setError(null);
+	useEffect(() => {
+		let alive = true;
+		setLoading(true);
+		setError(null);
 
-    fetchSystemSnapshot(pcId)
-      .then((d) => {
-        if (alive) {
-          setData(d);
-          setLoading(false);
-        }
-      })
-      .catch((e) => {
-        if (alive) {
-          setError(e as Error);
-          setLoading(false);
-        }
-      });
+		fetchSystemSnapshot(pcId)
+			.then((d) => {
+				if (alive) {
+					setData(d);
+					setLoading(false);
+				}
+			})
+			.catch((e) => {
+				if (alive) {
+					setError(e as Error);
+					setLoading(false);
+				}
+			});
 
-    return () => {
-      alive = false;
-    };
-  }, [pcId]);
+		return () => {
+			alive = false;
+		};
+	}, [pcId]);
 
-  return { data, loading, error };
+	return { data, loading, error };
 }
 
 export function formatUptime(sec: number) {
-  const d = Math.floor(sec / 86400);
-  const h = Math.floor((sec % 86400) / 3600);
-  const m = Math.floor((sec % 3600) / 60);
-  return `${d}d ${h}h ${m}m`;
+	if (!Number.isFinite(sec) || sec < 0) return "-";
+
+	const d = Math.floor(sec / 86400);
+	const h = Math.floor((sec % 86400) / 3600);
+	const m = Math.floor((sec % 3600) / 60);
+	const s = sec % 60;
+
+	if (d > 0) return `${d}d ${h}h ${m}m ${s}s`;
+	if (h > 0) return `${h}h ${m}m ${s}s`;
+	if (m > 0) return `${m}m ${s}s`;
+	return `${s}s`;
 }
