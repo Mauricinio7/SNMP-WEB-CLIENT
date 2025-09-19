@@ -1,8 +1,8 @@
 import { useParams, Navigate } from "react-router-dom";
-import DiskCard from "../features/Disk/DiskCard";
-import s from "./styles/diskDetailsPage.module.css";
+import NetCard from "../features/Net/NetCard";
+import s from "./styles/netDetailsPage.module.css";
 
-export default function DiskDetailsPage() {
+export default function NetDetailsPage() {
 	const { id } = useParams<{ id?: string }>();
 	const idNum = Number(id);
 
@@ -12,10 +12,10 @@ export default function DiskDetailsPage() {
 
 	return (
 		<section className={s.wrapper}>
-			<h2 className={s.title}>Detalles del Disco {idNum}</h2>
+			<h2 className={s.title}>Detalles de Red de PC {idNum}</h2>
 
 			<div className={s.grid}>
-				<DiskCard id={idNum} />
+				<NetCard id={idNum} />
 			</div>
 		</section>
 	);
