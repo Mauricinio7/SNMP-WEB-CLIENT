@@ -10,20 +10,20 @@
 .grid {
 	display: grid;
 	gap: 60px;
-	grid-template-columns: repeat(1, minmax(60px, 1fr));
+	grid-template-columns: repeat(1, minmax(260px, 1fr));
 	max-width: 1600px;
 	margin: 0 auto;
 }
 
 @media (min-width: 640px) {
 	.grid {
-		grid-template-columns: repeat(2, minmax(60px, 1fr));
+		grid-template-columns: repeat(1, minmax(260px, 1fr));
 	}
 }
 
 @media (min-width: 1024px) {
 	.grid {
-		grid-template-columns: repeat(3, minmax(60px, 1fr));
+		grid-template-columns: repeat(1, minmax(260px, 1fr));
 	}
 }
 
