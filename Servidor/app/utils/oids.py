@@ -35,6 +35,7 @@ SISTEM_DATA_OIDS = {
     "contact": "1.3.6.1.2.1.1.4.0",
     "device_name": "1.3.6.1.2.1.1.5.0",
     "location": "1.3.6.1.2.1.1.6.0",
+    "temperature": "1.3.6.1.4.1.2021.13.16.2.1.3.1"
 }
 
 NET_PREVIEW_DATA_OIDS = {

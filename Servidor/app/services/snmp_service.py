@@ -149,7 +149,8 @@ def get_system_data(member_id: int) -> dict:
             "operation_uptime": "0",
             "contact": "Desconocido",
             "device_name": "Desconocido",
-            "location": "Desconocido"
+            "location": "Desconocido",
+            "temperature": "0",
         }
     
     ip = member["ip"]
@@ -161,6 +162,7 @@ def get_system_data(member_id: int) -> dict:
         "contact": snmp_get(ip, community, SISTEM_DATA_OIDS["contact"]),
         "device_name": snmp_get(ip, community, SISTEM_DATA_OIDS["device_name"]),
         "location": snmp_get(ip, community, SISTEM_DATA_OIDS["location"]),
+        "temperature": snmp_get(ip, community, SISTEM_DATA_OIDS["temperature"]),
     }
 
 def get_network_preview_data(member_id: int) -> dict:
