@@ -1,4 +1,4 @@
-export type Network = {
+export type Net = {
 	id: number;
 	interfaces: {
 		ipAddress: string;
@@ -9,7 +9,7 @@ export type Network = {
 	}[];
 };
 
-export async function fetchNetworkById(id: number): Promise<Network> {
+export async function fetchNetworkById(id: number): Promise<Net> {
 	const res = await fetch(`http://127.0.0.1:8000/snmp/network/data/${id}`);
 	if (!res.ok) {
 		throw new Error(`Error ${res.status}: no se pudo obtener la información de red de la PC ${id}`);
@@ -24,7 +24,7 @@ export async function fetchNetworkById(id: number): Promise<Network> {
 		tcpProtocol: json.tcp_protocol || "Desconocido",
 	}));
 
-	const network: Network = {
+	const network: Net = {
 		id,
 		interfaces,
 	};
